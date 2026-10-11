@@ -1,5 +1,7 @@
 # agents-md-ci-gate
 
+Proves: disciplined use of agentic coding tools: AGENTS.md rules enforced in CI with planted bad changes. Verify in 60s: `python3 evaluate.py`.
+
 Teams adopting agentic coding tools need their AGENTS.md rules enforced mechanically in CI, so a change that breaks a rule fails the build instead of relying on the agent or the reviewer remembering it.
 
 `agents-lint` reads a fenced rules block in `AGENTS.md` and a unified diff, prints one line per violation, and exits 1 on any. Rule kinds: forbidden paths, a required test for each source change, forbidden added content (secret pattern), commit subject format, and a file-count limit. Python 3 standard library only, no network, no model call.
