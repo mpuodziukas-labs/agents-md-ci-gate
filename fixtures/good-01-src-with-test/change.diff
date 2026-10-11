@@ -1,0 +1,12 @@
+diff --git a/src/billing.py b/src/billing.py
+--- a/src/billing.py
++++ b/src/billing.py
+@@ -1 +1 @@
+-old
++total = a + b
+diff --git a/tests/test_billing.py b/tests/test_billing.py
+--- a/tests/test_billing.py
++++ b/tests/test_billing.py
+@@ -1 +1 @@
+-old
++def test_total(): pass

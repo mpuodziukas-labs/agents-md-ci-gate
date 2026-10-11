@@ -1,0 +1,6 @@
+diff --git a/.env b/.env
+--- a/.env
++++ b/.env
+@@ -1 +1 @@
+-old
++DEBUG=1

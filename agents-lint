@@ -1,0 +1,76 @@
+#!/usr/bin/env python3
+"""agents-lint: enforce the machine-checkable rules in AGENTS.md against a unified diff.
+
+  agents-lint --rules AGENTS.md --diff change.diff [--message msg.txt]
+  git diff --cached | agents-lint --rules AGENTS.md --diff -
+
+One line per violation on stdout. Exit 0 clean, 1 violations, 2 usage or no rules (fail closed).
+"""
+import argparse, re, sys
+
+def load_rules(text):
+    m = re.search(r"```agents-lint\n(.*?)```", text, re.S)
+    rules = []
+    for line in (m.group(1).splitlines() if m else []):
+        if line.strip():
+            rid, kind, arg = [p.strip() for p in line.split(" | ", 2)]
+            rules.append((rid, kind, arg))
+    return rules
+
+def parse_diff(text):
+    files, added, cur = [], [], None
+    for line in text.splitlines():
+        if line.startswith("diff --git "):
+            cur = line.split(" b/", 1)[1]
+            files.append(cur)
+        elif line.startswith("+") and not line.startswith("+++") and cur:
+            added.append((cur, line[1:]))
+    return files, added
+
+def lint(rules, diff_text, message=None):
+    files, added = parse_diff(diff_text)
+    out = []
+    for rid, kind, arg in rules:
+        if kind == "forbid-path":
+            out += [f"{rid}: {f} matches forbidden path {arg}" for f in files if re.search(arg, f)]
+        elif kind == "require-paired":
+            src, need = arg.split(" => ")
+            hit = [f for f in files if re.search(src, f)]
+            if hit and not any(re.search(need, f) for f in files):
+                out.append(f"{rid}: {hit[0]} changed with no file matching {need}")
+        elif kind == "forbid-added":
+            out += [f"{rid}: {f} adds a line matching {arg}" for f, l in added if re.search(arg, l)]
+        elif kind == "commit-message" and message is not None:
+            first = message.strip().splitlines()[0] if message.strip() else ""
+            if not re.search(arg, first):
+                out.append(f"{rid}: subject {first!r} does not match {arg}")
+        elif kind == "max-files":
+            if len(files) > int(arg):
+                out.append(f"{rid}: {len(files)} files changed, limit {arg}")
+        elif kind not in ("commit-message",):
+            raise ValueError(f"unknown rule kind {kind!r} in rule {rid}")
+    return out
+
+def main(argv):
+    ap = argparse.ArgumentParser(prog="agents-lint")
+    ap.add_argument("--rules", required=True)
+    ap.add_argument("--diff", required=True)
+    ap.add_argument("--message")
+    a = ap.parse_args(argv)
+    try:
+        rules = load_rules(open(a.rules).read())
+        if not rules:
+            print("agents-lint: no rules found (refusing to pass with zero rules)", file=sys.stderr)
+            return 2
+        diff = sys.stdin.read() if a.diff == "-" else open(a.diff).read()
+        msg = open(a.message).read() if a.message else None
+        v = lint(rules, diff, msg)
+    except (OSError, ValueError) as e:
+        print(f"agents-lint: {e}", file=sys.stderr)
+        return 2
+    for line in v:
+        print(line)
+    return 1 if v else 0
+
+if __name__ == "__main__":
+    sys.exit(main(sys.argv[1:]))

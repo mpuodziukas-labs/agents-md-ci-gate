@@ -1,0 +1,6 @@
+diff --git a/src/billing.py b/src/billing.py
+--- a/src/billing.py
++++ b/src/billing.py
+@@ -1 +1 @@
+-old
++total = a + b

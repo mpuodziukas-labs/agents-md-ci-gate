@@ -1,0 +1,36 @@
+diff --git a/docs/page1.md b/docs/page1.md
+--- a/docs/page1.md
++++ b/docs/page1.md
+@@ -1 +1 @@
+-old
++edit 1
+diff --git a/docs/page2.md b/docs/page2.md
+--- a/docs/page2.md
++++ b/docs/page2.md
+@@ -1 +1 @@
+-old
++edit 2
+diff --git a/docs/page3.md b/docs/page3.md
+--- a/docs/page3.md
++++ b/docs/page3.md
+@@ -1 +1 @@
+-old
++edit 3
+diff --git a/docs/page4.md b/docs/page4.md
+--- a/docs/page4.md
++++ b/docs/page4.md
+@@ -1 +1 @@
+-old
++edit 4
+diff --git a/docs/page5.md b/docs/page5.md
+--- a/docs/page5.md
++++ b/docs/page5.md
+@@ -1 +1 @@
+-old
++edit 5
+diff --git a/docs/page6.md b/docs/page6.md
+--- a/docs/page6.md
++++ b/docs/page6.md
+@@ -1 +1 @@
+-old
++edit 6

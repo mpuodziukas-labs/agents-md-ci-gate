@@ -1,0 +1,6 @@
+diff --git a/infra/prod/deploy.yml b/infra/prod/deploy.yml
+--- a/infra/prod/deploy.yml
++++ b/infra/prod/deploy.yml
+@@ -1 +1 @@
+-old
++replicas: 9

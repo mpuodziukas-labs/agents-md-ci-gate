@@ -1,0 +1,12 @@
+diff --git a/src/db.py b/src/db.py
+--- a/src/db.py
++++ b/src/db.py
+@@ -1 +1 @@
+-old
++password = "hunter2"
+diff --git a/tests/test_db.py b/tests/test_db.py
+--- a/tests/test_db.py
++++ b/tests/test_db.py
+@@ -1 +1 @@
+-old
++def test_db(): pass
